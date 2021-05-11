@@ -1,7 +1,3 @@
-/**
- * 
- 
-*/
 $(document).ready(function()
 {
 
@@ -13,6 +9,7 @@ $(document).ready(function()
 $(document).on("click", "#btnSave", function(event)
 {
 	// Clear alerts---------------------
+
 	
 	 $("#alertSuccess").text("");
  	 $("#alertSuccess").hide();
@@ -21,7 +18,7 @@ $(document).on("click", "#btnSave", function(event)
  	 
  	 
    	// Form validation-------------------
-   	
+  	
 	var status = validateItemForm();
 	if (status != true)
 	{
@@ -35,7 +32,7 @@ $(document).on("click", "#btnSave", function(event)
 	
 	
 	var type = ($("#hidItemIDSave").val() == "") ? "POST" : "PUT";
-	
+
 	 $.ajax(
  	 {
  		url : "ItemAPI",
@@ -86,7 +83,8 @@ function onItemSaveComplete(response, status)
 }
 $(document).on("click", ".btnUpdate", function(event)
 {
-		$("#hidItemIDSave").val($(this).data("itemid"));
+		var id = event.target.id;
+		$("#hidItemIDSave").val(id.substring(0, id.length-1));
  		$("#itemCode").val($(this).closest("tr").find('td:eq(0)').text());
  		$("#itemName").val($(this).closest("tr").find('td:eq(1)').text());
  		$("#itemPrice").val($(this).closest("tr").find('td:eq(2)').text());
@@ -122,6 +120,8 @@ function onItemDeleteComplete(response, status)
  				$("#alertSuccess").show();
  				
 			    $("#divItemsGrid").html(resultSet.data);
+			    
+			    setTimeout( (function(){alert(43)}, 1000));
  			} else if (resultSet.status.trim() == "error")
  			{
 				 $("#alertError").text(resultSet.data);
@@ -137,4 +137,45 @@ function onItemDeleteComplete(response, status)
  		$("#alertError").show();
  	}
 }
+function validateItemForm()
+{
+	// CODE
+	if ($("#itemCode").val().trim() == "")
+ 	{
+		 return "Insert Item Code.";
+    }
+    
+    
+	// NAME
+	if ($("#itemName").val().trim() == "")
+    {
+		 return "Insert Item Name.";
+ 	} 
+ 	
 
+	// PRICE-------------------------------
+	if ($("#itemPrice").val().trim() == "")
+    {
+ 		return "Insert Item Price.";
+ 	}
+ 	
+ 	
+	// is numerical value
+	var tmpPrice = $("#itemPrice").val().trim();
+	if (!$.isNumeric(tmpPrice))
+ 	{
+ 		return "Insert a numerical value for Item Price.";
+ 	}
+ 	
+ 	
+	// convert to decimal price
+ 	$("#itemPrice").val(parseFloat(tmpPrice).toFixed(2));
+ 	
+ 	
+	// DESCRIPTION------------------------
+	if ($("#itemDesc").val().trim() == "")
+   {
+		 return "Insert Item Description.";
+   }
+   return true;
+}

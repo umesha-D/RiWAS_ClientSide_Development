@@ -61,13 +61,13 @@ import java.sql.*;
 						 String itemDesc = rs.getString("itemDesc"); 
 						 
 			 // Add a row into the html table
-						 output += "<tr><td><input id ='hidItemIDUpdate' name ='hidItemIDUpdate'type='hidden' value='" + itemID + " '>"	+ itemCode + "</td>";
+						 output += "<tr><td><input id ='hidItemIDUpdate' name ='hidItemIDUpdate' type='hidden' value='" + itemID + " '>"	+ itemCode + "</td>";
 						
 						 output += "<td>" + itemName + "</td>"; 
 						 output += "<td>" + itemPrice + "</td>"; 
 						 output += "<td>" + itemDesc + "</td>";
 			 // buttons
-						 output += "<td><input name='btnUpdate' type='button' value='Update' class=' btnUpdate btn btn-secondary'></td><td><input name='btnRemove' type='button' value='Remove' class='btnRemove btn btn-danger' data-itemid='"+ itemID + " '>" + "</td></tr>";  
+						 output += "<td><input name='btnUpdate' id ='" + itemID + " ' type='button' value='Update' class=' btnUpdate btn btn-secondary'></td><td><input name='btnRemove' type='button' value='Remove' class='btnRemove btn btn-danger' data-rechearcher='"+ itemID + " '>" + "</td></tr>";  
 					 } 
 					 con.close(); 
 					 
@@ -143,7 +143,7 @@ import java.sql.*;
 						 return "Error while connecting to the database for updating."; 
 					 } 
 				 // create a prepared statement
-					 String query = "update item set itemName = ?, itemPrice = ?, itemDesc = ? where itemID = ?"; 
+					 String query = "update item set  itemCode = ?,  itemName = ?, itemPrice = ?, itemDesc = ? where itemID = ?"; 
 					 
 					 PreparedStatement preparedStmt = con.prepareStatement(query); 
 					 
@@ -171,7 +171,7 @@ import java.sql.*;
 				return output; 
 		}
 
-		public String deleteItem(String itemID)
+		public String deleteItem(String itemIDData)
 		{ 
 				String output = ""; 
 				try
@@ -185,7 +185,7 @@ import java.sql.*;
 					 String query = "delete from item where itemID=?"; 
 					 PreparedStatement preparedStmt = con.prepareStatement(query); 
 					 // binding values
-					 preparedStmt.setInt(1, Integer.parseInt(itemID)); 
+					 preparedStmt.setInt(1, Integer.parseInt(itemIDData)); 
 
 					 // execute the statement
 					 preparedStmt.execute(); 
